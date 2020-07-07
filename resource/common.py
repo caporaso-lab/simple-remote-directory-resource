@@ -32,4 +32,4 @@ def make_key_from(key_string, key_type):
     elif key_type == 'ed25519':
         return paramiko.ed25519key.Ed25519Key.from_private_key(key_file)
 
-    raise ValueError('Invalid key_type %s', key_type)
+    raise ValueError(f'Invalid key_type {key_type}')
