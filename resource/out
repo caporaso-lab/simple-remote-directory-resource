@@ -1,1 +1,35 @@
 #!/usr/bin/env python
+
+import os
+import sys
+import json
+from datetime import datetime
+
+import common
+
+
+def main(hostname, username, private_key, key_type, path, params, input):
+    private_key = common.make_key_from(private_key, key_type)
+
+    contents = os.listdir(input)
+    if len(contents) != 1:
+        raise ValueError("Input directory to resource should contain exactly"
+                         " one file.")
+
+    input_file = os.path.join(input, contents[0])
+    filename = os.path.basename(input_file)
+    remote_path = os.path.join(path, filename)
+    with common.make_sftp(hostname, username, private_key) as sftp:
+        remote_attr = sftp.put(input_file, remote_path)
+
+    version = {'date': str(datetime.fromtimestamp(remote_attr.st_mtime))}
+
+    return {'version': version,
+            'metdata': [{'name': 'filename', 'value': filename}]}
+
+
+if __name__ == '__main__':
+    options = json.load(sys.stdin)
+    response = main(**options['source'], params=options.get('params', {}),
+                    input=sys.argv[1])
+    print(json.dumps(response))
