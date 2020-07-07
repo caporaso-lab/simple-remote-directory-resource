@@ -24,7 +24,8 @@ def main(hostname, username, private_key, key_type, path, version, params,
 
         sftp.get(os.path.join(path, filename), os.path.join(dest, filename))
 
-    return {**version, 'filename': filename}
+    return {'version': version,
+            'metdata': [{'name': 'filename', 'value': filename}]}
 
 
 if __name__ == '__main__':
