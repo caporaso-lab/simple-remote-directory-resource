@@ -1,0 +1,33 @@
+#!/usr/bin/env python
+
+import os
+import sys
+import json
+from datetime import datetime
+
+import common
+
+
+def main(hostname, username, private_key, key_type, path, version, params,
+         dest):
+    private_key = common.make_key_from(private_key, key_type)
+    with common.make_sftp(hostname, username, private_key) as sftp:
+        contents = sftp.listdir_attr(path)
+
+        for file_ in contents:
+            if str(datetime.fromtimestamp(file_.st_mtime)) == version['date']:
+                filename = file_.filename
+                break
+        else:
+            raise ValueError('Could not find file matching version: '
+                             f'{version["date"]}')
+
+        sftp.get(os.path.join(path, filename), os.path.join(dest, filename))
+
+    return {**version, 'filename': filename}
+
+if __name__ == '__main__':
+    options = json.load(sys.stdin)
+    response = main(**options['source'], version=options['version'],
+                    params=options.get('params', {}), dest=sys.argv[1])
+    print(json.dumps(response))
