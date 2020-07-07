@@ -26,6 +26,7 @@ def main(hostname, username, private_key, key_type, path, version, params,
 
     return {**version, 'filename': filename}
 
+
 if __name__ == '__main__':
     options = json.load(sys.stdin)
     response = main(**options['source'], version=options['version'],
