@@ -22,7 +22,8 @@ def main(hostname, username, private_key, key_type, path, version, params,
             raise ValueError('Could not find file matching version: '
                              f'{version["date"]}')
 
-        sftp.get(os.path.join(path, filename), os.path.join(dest, filename))
+        with open(os.path.join(dest, filename), 'w') as fh:
+            fh.write(os.path.join(path, filename))
 
     return {'version': version,
             'metdata': [{'name': 'filename', 'value': filename}]}

@@ -18,10 +18,12 @@ def main(hostname, username, private_key, key_type, path, source, job_dir):
                          " one file.")
 
     input_file = os.path.join(input_dir, contents[0])
-    filename = os.path.basename(input_file)
-    remote_path = os.path.join(path, filename)
+    with open(input_file) as fh:
+        remote_path = fh.read().strip()
+        filename = os.path.basename(remote_path)
+
     with common.make_sftp(hostname, username, private_key) as sftp:
-        remote_attr = sftp.put(input_file, remote_path)
+        remote_attr = sftp.stat(remote_path)
 
     version = {'date': str(datetime.fromtimestamp(remote_attr.st_mtime))}
 
