@@ -32,5 +32,5 @@ def main(hostname, username, private_key, key_type, path, source, job_dir):
 if __name__ == '__main__':
     options = json.load(sys.stdin)
     response = main(**options['source'], **options['params'],
-                    input=sys.argv[1])
+                    job_dir=sys.argv[1])
     print(json.dumps(response))
