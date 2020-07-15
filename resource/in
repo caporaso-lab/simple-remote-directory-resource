@@ -26,7 +26,7 @@ def main(hostname, username, private_key, key_type, path, version, params,
             fh.write(os.path.join(path, filename))
 
     return {'version': version,
-            'metdata': [{'name': 'filename', 'value': filename}]}
+            'metadata': [{'name': 'filename', 'value': filename}]}
 
 
 if __name__ == '__main__':
