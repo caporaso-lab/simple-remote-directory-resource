@@ -3,6 +3,7 @@
 import io
 import sys
 import json
+import time
 from datetime import datetime
 
 import common
@@ -14,6 +15,14 @@ def main(hostname, username, private_key, key_type, path, version=None):
         contents = sftp.listdir_attr(path)
 
     versions = sorted([datetime.fromtimestamp(x.st_mtime) for x in contents])
+    time.sleep(5)
+    versions2 = sorted([datetime.fromtimestamp(x.st_mtime) for x in contents])
+
+    if versions != versions2:
+        if version is None:
+            return []
+        else:
+            return [version]
 
     if version is not None:
         version = datetime.fromisoformat(version['date'])
