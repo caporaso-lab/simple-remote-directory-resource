@@ -13,10 +13,14 @@ def main(hostname, username, private_key, key_type, path, version=None):
     private_key = common.make_key_from(private_key, key_type)
     with common.make_sftp(hostname, username, private_key) as sftp:
         contents = sftp.listdir_attr(path)
+        versions = sorted([datetime.fromtimestamp(x.st_mtime)
+                           for x in contents])
 
-    versions = sorted([datetime.fromtimestamp(x.st_mtime) for x in contents])
-    time.sleep(5)
-    versions2 = sorted([datetime.fromtimestamp(x.st_mtime) for x in contents])
+        time.sleep(5)
+
+        contents = sftp.listdir_attr(path)
+        versions2 = sorted([datetime.fromtimestamp(x.st_mtime)
+                            for x in contents])
 
     if versions != versions2:
         if version is None:
