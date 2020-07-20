@@ -22,11 +22,16 @@ def main(hostname, username, private_key, key_type, path, version, params,
             raise ValueError('Could not find file matching version: '
                              f'{version["date"]}')
 
+        remote_path = os.path.join(path, filename)
         with open(os.path.join(dest, 'reference.link'), 'w') as fh:
-            fh.write(os.path.join(path, filename))
+            fh.write(remote_path)
 
     return {'version': version,
-            'metadata': [{'name': 'filename', 'value': filename}]}
+            'metadata': [
+                {'name': 'filename', 'value': filename},
+                {'name': 'download',
+                 'value': commmon.download_url(remote_path)}
+            ]}
 
 
 if __name__ == '__main__':

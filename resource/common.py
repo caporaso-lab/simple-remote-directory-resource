@@ -1,4 +1,5 @@
 import io
+import time
 import contextlib
 
 import paramiko
@@ -33,3 +34,8 @@ def make_key_from(key_string, key_type):
         return paramiko.ed25519key.Ed25519Key.from_private_key(key_file)
 
     raise ValueError(f'Invalid key_type {key_type}')
+
+
+def download_url(abspath):
+    return (f'https://ondemand.hpc.nau.edu/pun/sys/files/api/v1/fs{abspath}'
+            f'?download={int(time.time())}')

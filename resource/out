@@ -28,7 +28,11 @@ def main(hostname, username, private_key, key_type, path, source, job_dir):
     version = {'date': str(datetime.fromtimestamp(remote_attr.st_mtime))}
 
     return {'version': version,
-            'metadata': [{'name': 'filename', 'value': filename}]}
+            'metadata': [
+                {'name': 'filename', 'value': filename},
+                {'name': 'download',
+                 'value': commmon.download_url(remote_path)}
+            ]}
 
 
 if __name__ == '__main__':
