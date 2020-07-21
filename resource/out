@@ -31,7 +31,7 @@ def main(hostname, username, private_key, key_type, path, source, job_dir):
             'metadata': [
                 {'name': 'filename', 'value': filename},
                 {'name': 'download',
-                 'value': commmon.download_url(remote_path)}
+                 'value': common.download_url(remote_path)}
             ]}
 
 
